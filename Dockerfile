@@ -6,7 +6,7 @@ EXPOSE $PORT
 ADD main.py .
 RUN apk update &&                                                                     \
     apk add python3 py-pip uwsgi-python uwsgi-http py-flask gcc musl-dev ffmpeg curl; \
-    pip3 install https://github.com/vstavrinov/streamlink/archive/master.zip;         \
+    pip3 install streamlink;                                                          \
     apk del gcc musl-dev;                                                             \
     rm -vfr /root/.cache /var/cache/apk/*
 CMD uwsgi --http-socket 0.0.0.0:$PORT \
@@ -17,4 +17,7 @@ CMD uwsgi --http-socket 0.0.0.0:$PORT \
           --workers 4                 \
           --threads 4                 \
           --uid uwsgi                 \
+          --vacuum                    \
+          --disable-logging           \
+          --die-on-term               \
           --master
